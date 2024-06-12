@@ -14,10 +14,8 @@
 #######################################
 
 # cd C:\Users\namxm\OneDrive\Máy tính\Ki2Nam3\PBL5\PBL5 - AI\flask
-# py server-new.py
+# py server.py
 
-# Nhớ thay ip springboot ở dưới và ip flask ở bên code esp32-cam
-# Nếu bị brown out thì tháo dây lcd ra để esp32-cam kết nối đã, xong r cắm lại
 #######################################
 
 # import flask
@@ -33,7 +31,6 @@ from ultralytics import YOLO
 from PIL import Image
 
 import numpy as np
-import requests
 
 app = Flask(__name__)
 
@@ -60,16 +57,15 @@ def predict_yolov8():
         with open(image_path, "wb") as file:
             file.write(image_data)
         
-        print(datetime.now().time()," Image received")
+        print(datetime.now().time()," Image received...")
 
         ##########################################
         # bắt đầu AI nhận diện
         ##########################################
         
         model = YOLO('../runs/detect/train3/weights/best.pt')
-        #results = model(os.path.join('./pictures', filename));
-        results = model(os.path.join('./pictures', filename),show_labels=True,show_conf=True,save=True,project=os.path.join('./'),exist_ok=True);
-        #results = model(os.path.join('./pictures', "05-18-13h25p.jpg"),show_labels=True,show_conf=True,save=True,project=os.path.join('./'),exist_ok=True)
+        results = model(os.path.join('./pictures', filename));
+
         # Count number of pipe
         boxDetected = int( (results[0].boxes.cpu().numpy().xywh.size) /4 )
         confidence = (100 
@@ -78,7 +74,7 @@ def predict_yolov8():
               else round(np.mean(results[0].boxes.conf.cpu().numpy()) * 100))
         
         print('\n');
-        print(datetime.now().time(),"AI finished");
+        print(datetime.now().time());
         print('👉👉👉 NUMBER OF PIPE: ', boxDetected)
         print('👉👉👉 OVERALL CONF: ', confidence, '%')
 
@@ -89,38 +85,8 @@ def predict_yolov8():
 
 
         ##########################################
-        # gửi kết quả tới Spring Boot
-        ##########################################
-        print(datetime.now().time()," Sending image to Spring...")
-        
-        spring_post_url = "http://172.20.10.6:8080/image/receive"  # Replace with your Spring Boot URL
-        
-        local_image_path = os.path.join('./predict', filename)  # Replace with the actual local file path
-        
-        headers = {
-            "Content-Type": "image/jpeg",
-            "X-Extra-Data": str(boxDetected)
-        }
-
-        try:
-            # Read the image from the local file system
-            with open(local_image_path, 'rb') as image_file:
-                image_data = image_file.read()
-            
-            # Send the image data in the POST request
-            response = requests.post(spring_post_url, headers=headers, data=image_data, timeout=15)
-            
-            if response.status_code == 200:
-                print("Post to Spring Boot Success!!!")
-            else:
-                print("Failed to post to Spring Boot")
-
-        except Exception as e:
-            print("Request to Spring Boot got exception")
-        ##########################################
         # xong
         ##########################################
-        print(datetime.now().time()," Done Everything!")
         return str(finalResultPredicted), 200  
         
     except Exception as e:

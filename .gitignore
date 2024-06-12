@@ -1,3 +1,7 @@
-PBL5 - AI/models/yolov8x.pt
+# Ignore all .pt files
+# *.pt
+
+# Explicitly ignore specific .pt files in the project
+# PBL5 - AI/models/yolov8x.pt
 PBL5 - AI/runs/detect/train3/weights/best.pt
 PBL5 - AI/runs/detect/train3/weights/last.pt
