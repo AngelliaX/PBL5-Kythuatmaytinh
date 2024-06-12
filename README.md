@@ -6,9 +6,19 @@
 
 ###
 
-<h2 align="left">Cách chạy AI server</h2>
+<h2 align="left">Giải thích nội dung</h2>
+<p align="left">
+  PBL5 - AI: Chứa code của AI Server.<br>
+  PBL5-Arduino: Chứa code của Arduino.<br>
+  PBL5-Esp32cam: Chứa code của Esp32-cam.<br>
+  labeled_data: Chứa dữ liệu huấn luyện 2 đợt của AI. 
+</p>
 
 ###
+
+###
+
+<h2 align="left">Cách chạy AI server</h2>
 
 <p align="left">
   Bước 1: Tải thư mục <code>weights</code> chứa model đã huấn luyện tại <a href="https://drive.google.com/drive/folders/1-oAPeadHxmlw1xbCvZdOYPtxVPoZ65uC?usp=sharing">Google Drive</a> và đặt vào <code>C:\PBL5 - AI\runs\detect\train3\</code><br>
